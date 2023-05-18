@@ -2,45 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 
-Random rand =  new Random();
-
-int N = 10_000;
-
-monteCarlo();
-
-void monteCarlo()
-{
-    int atkPoints = 0;
-    int defPoints = 0;
-
-    var start = DateTime.Now;
-    for(int i = 0; i < N; i++)
-    {
-        var result = Round();
-        atkPoints += result.atkResult ? 1 : 0;
-        defPoints += result.defResult ? 1 : 0;
-    }
-    var end = DateTime.Now;
-
-    System.Console.WriteLine(atkPoints);
-    System.Console.WriteLine(defPoints);
-    System.Console.WriteLine((end - start).Seconds);
-}
-
-(bool atkResult, bool defResult) Round()
-{
-    Team a = new Team() { rnd = rand, Quantity = 1000, _Side = Team.Side.Attack };
-    Team b = new Team() { rnd = rand, Quantity = 765, _Side = Team.Side.Defense };
-
-    while(a.Quantity > 1 && b.Quantity > 0)
-    {
-        a.Attack(b);
-    }
-
-    return (a.Quantity > 1, b.Quantity > 0);
-}
-
-
+namespace TeamOnTime;
 public class Team
 {
     public Random rnd { private get; set; }
@@ -49,14 +11,35 @@ public class Team
 
     public Side _Side { get; set; }
 
-    public enum Side { Attack, Defense }
+    public bool hasLost()
+        => 
+        (this._Side is Side.Attack && this.Quantity <= 1)
+        ||
+        (this._Side is Side.Defense && this.Quantity <= 0);
+
+    public Team(Random rnd, int qtd, Side side)
+    {
+        this.rnd = rnd;
+        this.Quantity = qtd;
+        this._Side = side;
+    }
 
     public void Attack(Team enemy)
     {
-        int[] myDices = new int[3]; 
-        int[] enemyDices = new int[3];
+        if(this.hasLost() || enemy.hasLost())
+            return;
 
-        for(int i = 0; i < 3; i++)
+        int matchQtd = 3;
+        
+        if(this.Quantity < 3)
+            matchQtd = this.Quantity;
+        else if (enemy.Quantity < 3)
+            matchQtd = this.Quantity;
+
+        int[] myDices = new int[matchQtd];
+        int[] enemyDices = new int[matchQtd];
+
+        for(int i = 0; i < matchQtd; i++)
         {
             myDices[i] = roll();
             enemyDices[i] = roll();
@@ -65,21 +48,13 @@ public class Team
         myDices = myDices.OrderDescending().ToArray();
         enemyDices = enemyDices.OrderDescending().ToArray();
 
-        int totalRounds = enemy.Quantity >= 3 ? 3 : enemy.Quantity;
-
-        int myLoss = 0;
-        int enemyLoss = 0;
-
-        for(int i = 0; i < totalRounds; i++)
+        for(int i = 0; i < matchQtd; i++)
         {
             if(myDices[i] > enemyDices[i])
-                enemyLoss++;
+                enemy.ReceiveDMG(1);
             else if(enemyDices[i] >= myDices[i])
-                myLoss++;            
-        }
-
-        this.ReceiveDMG(myLoss);
-        enemy.ReceiveDMG(enemyLoss);
+                this.ReceiveDMG(1);
+        }     
     }
 
     public void ReceiveDMG(int qtd)
@@ -94,3 +69,5 @@ public class Team
         => this.rnd.Next(6) + 1;
 
 }
+
+public enum Side { Attack, Defense }

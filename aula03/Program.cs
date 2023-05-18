@@ -23,7 +23,7 @@ public class Singleton
 
     public static void New()
         => crr = new Singleton();
-z
+
     public static void New(string text)
         => crr = new Singleton(text);
 }
