@@ -10,19 +10,14 @@ public abstract class Aggregation : Function
 
     public Aggregation(Function f)
         => this.inner = f;
-
-    protected abstract double calcule(Function f, double x);
-
-    protected override double get(double x)
-        => calcule(inner, x);
 }
 
 public class Cos : Aggregation
 {
     public Cos(Function f) : base(f) { }
 
-    protected override double calcule(Function f, double x)
-        => Math.Cos(f[x]);
+    protected override double get(double x)
+        => Math.Cos(inner[x]);
 
     public override Function Derive()
         => new Sin(inner);
@@ -35,8 +30,8 @@ public class Sin : Aggregation
 {
     public Sin(Function f) : base(f) { }
 
-    protected override double calcule(Function f, double x)
-        => Math.Sin(f[x]);
+    protected override double get(double x)
+        => Math.Sin(inner[x]);
 
     public override Function Derive()
         => new Cos(inner);
@@ -49,8 +44,8 @@ public class Ln : Aggregation
 {
     public Ln(Function f) : base(f) { }
 
-    protected override double calcule(Function f, double x)
-        => Math.Log(f[x]);
+    protected override double get(double x)
+        => Math.Log(inner[x]);
 
     public override Function Derive()
         => x.Derive() / x;
@@ -67,8 +62,8 @@ public class Pow : Aggregation
     public Pow(Function f, Function e) : base(f)
         => this.expoent = e;
 
-    protected override double calcule(Function f, double x)
-        => Math.Pow(f[x], expoent[x]);
+    protected override double get(double x)
+        => Math.Pow(inner[x], expoent[x]);
 
     public override Function Derive()
         => pow(inner, expoent) * ln(inner) * expoent.Derive();

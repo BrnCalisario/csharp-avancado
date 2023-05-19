@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-
+using System.Collections.Generic;
 
 namespace Algebra.Composition;
 
@@ -26,7 +26,24 @@ public class Mult : Composition
     protected override string symbol => "*";
     public override Function Derive()
     {
-        throw new System.NotImplementedException();
+        Sum result = new Sum();
+
+        for(int i = 0; i < this.funcs.Count; i++)
+        {
+            Mult m = new Mult();
+            for(int j = 0; j < this.funcs.Count; j++)
+            {
+                if(i == j)
+                {
+                    m.Add(this.funcs[j].Derive());
+                    continue;
+                }
+                m.Add(this.funcs[j]);
+            }
+            result.Add(m);
+        }
+
+        return result;
     }
 
     protected override double get(double x)
@@ -46,10 +63,10 @@ public class Div : Composition
 
     protected override double get(double x)
     {
-        double result = this.funcs.Select(f => f[x]).FirstOrDefault();
+        if(this.funcs.Count == 1)
+            return this.funcs.First()[x];
 
-        if(result == 0)
-            return 0;
+        double result = this.funcs.Select(f => f[x]).FirstOrDefault();
 
         foreach(Function f in this.funcs.Skip(1))
             result /= f[x];
@@ -59,6 +76,10 @@ public class Div : Composition
 
     public override Function Derive()
     {
-        throw new NotImplementedException();
+        Function v = funcs[funcs.Count()-1];
+        Function u = new Div();
+        foreach(var f in this.funcs.SkipLast())    
+            
+        (v * u.Derive() - v.Derive() * u) / Pow(v, 2);
     }
 }

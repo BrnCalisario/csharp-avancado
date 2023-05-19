@@ -1,7 +1,13 @@
 ﻿using Algebra;
+using Algebra.Composition;
+
 using static Algebra.FunctionUtil;
 
+Mult m = new Mult();
 
-Function s = ln(pow(x, 2));
+m.Add(x);
+m.Add(pow(x, 2));
+m.Add(new Constant(2));
 
-System.Console.WriteLine("f(x) = " + s);
+System.Console.WriteLine(m.Derive());
+
