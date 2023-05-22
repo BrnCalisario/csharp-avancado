@@ -18,11 +18,27 @@ public abstract class Function
         s.Add(f);
         s.Add(g);
         return s;
-    }   
+    }
 
     public static Function operator +(Function f, double n)
     {
         Sum s = new Sum();
+        s.Add(f);
+        s.Add(new Constant(n));
+        return s;
+    }
+
+    public static Function operator -(Function f, Function g)
+    {
+        Sub s = new Sub();
+        s.Add(f);
+        s.Add(g);
+        return s;
+    }
+
+    public static Function operator -(Function f, double n)
+    {
+        Sub s = new Sub();
         s.Add(f);
         s.Add(new Constant(n));
         return s;

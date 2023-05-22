@@ -3,11 +3,11 @@ using Algebra.Composition;
 
 using static Algebra.FunctionUtil;
 
-Mult m = new Mult();
+Div d = new Div();
 
-m.Add(x);
-m.Add(pow(x, 2));
-m.Add(new Constant(2));
+d.Add(x);
+d.Add(x + 2);
 
-System.Console.WriteLine(m.Derive());
+System.Console.WriteLine(d.Derive()[2]);
+System.Console.WriteLine(d.Derive());
 

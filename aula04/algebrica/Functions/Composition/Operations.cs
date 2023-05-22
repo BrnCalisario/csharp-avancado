@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Algebra.Composition;
 
+using static FunctionUtil;
+
+
 public class Sum : Composition
 {
     protected override string symbol => "+";
@@ -21,6 +24,29 @@ public class Sum : Composition
     }
 }
 
+public class Sub : Composition
+{
+    protected override string symbol => "-";
+    protected override double get(double x)
+    {
+        double result = this.funcs.FirstOrDefault()[x];
+
+        foreach(var f in funcs.Skip(1))
+            result -= f[x];
+
+        return result;
+    }
+
+    public override Function Derive()
+    {
+        Sub s = new Sub();
+
+        foreach(var f in this.funcs)
+            s.Add(f);
+        return s;
+    }
+}
+
 public class Mult : Composition
 {
     protected override string symbol => "*";
@@ -28,12 +54,12 @@ public class Mult : Composition
     {
         Sum result = new Sum();
 
-        for(int i = 0; i < this.funcs.Count; i++)
+        for (int i = 0; i < this.funcs.Count; i++)
         {
             Mult m = new Mult();
-            for(int j = 0; j < this.funcs.Count; j++)
+            for (int j = 0; j < this.funcs.Count; j++)
             {
-                if(i == j)
+                if (i == j)
                 {
                     m.Add(this.funcs[j].Derive());
                     continue;
@@ -63,12 +89,12 @@ public class Div : Composition
 
     protected override double get(double x)
     {
-        if(this.funcs.Count == 1)
+        if (this.funcs.Count == 1)
             return this.funcs.First()[x];
 
         double result = this.funcs.Select(f => f[x]).FirstOrDefault();
 
-        foreach(Function f in this.funcs.Skip(1))
+        foreach (Function f in this.funcs.Skip(1))
             result /= f[x];
 
         return result;
@@ -76,10 +102,19 @@ public class Div : Composition
 
     public override Function Derive()
     {
-        Function v = funcs[funcs.Count()-1];
-        Function u = new Div();
-        foreach(var f in this.funcs.SkipLast())    
-            
-        (v * u.Derive() - v.Derive() * u) / Pow(v, 2);
+        if (this.funcs.Count() > 2)
+        {
+            Function v = funcs[funcs.Count() - 1];
+            Div u = new Div();
+            foreach (var f in this.funcs.SkipLast(1))
+                u.Add(f);
+
+            return ((v * u.Derive()) - (v.Derive() * u)) / pow(v, 2);
+        }
+
+        Function g = funcs[0];
+        Function h = funcs[1];
+
+        return ((h * g.Derive())- (h.Derive() * g)) / pow(h, 2);
     }
 }
