@@ -1,5 +1,8 @@
 ﻿using static System.Console;
 
+using Example.Invoke;
+
+
 Invoker app = new Invoker();
 Clear();
 
