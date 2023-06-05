@@ -25,6 +25,7 @@ CREATE TABLE GitDirectory(
 SELECT * FROM WatchDirectory
 SELECT * FROM GitDirectory
 
+
 DELETE FROM GitDirectory
 GO
 DELETE FROM WatchDirectory

@@ -28,6 +28,9 @@ public class RPA
                 case "inspect":
                     await inspectInput();
                     goto default;
+                // case "update all":
+                //     await pull();
+                //     goto default;
                 default:
                     ReadKey(true);
                     break;
@@ -106,7 +109,26 @@ public class RPA
         }
     }
 
-    private async Task TryPush(GitDirectory gd)
+    private async Task updateRepositories()
+    {
+        Write("Digite a tag do diretório: ");
+        var tag = ReadLine();
+
+        WatchDirectory wd;
+        try
+        {
+            wd = await api.FindByTag(tag);
+        }
+        catch
+        {
+            Write("Tag não encontrada");
+            return;
+        }
+
+        //TODO Add Get childs from api and foreach -> pull
+    }
+
+    private async Task pull(GitDirectory gd)
     {
         using var ps = PowerShell.Create();
 
@@ -116,28 +138,32 @@ public class RPA
             .Invoke();
 
         ps.Commands.Clear();
-        
-        ps
+
+        var main = ps
             .AddCommand("git")
-            .AddArgument("status");
-
-        var result = ps.Invoke();
-
-        if(result.Count(v => v.ToString().Contains("git push")) == 0)
-            return;
+            .AddArgument("branch")
+            .Invoke().First().ToString().Split(" ").Last();
 
         ps.Commands.Clear();
 
         var remote = ps
             .AddCommand("git")
             .AddArgument("remote")
-            .Invoke()
-            .First()
-            .ToString();
+            .Invoke().First().ToString();
 
+        ps.Commands.Clear();
 
+        var result = ps
+            .AddCommand("git")
+            .AddArgument("pull")
+            .AddParameter(remote)
+            .AddParameter(main)
+            .Invoke();
 
+        if (!result.Last().ToString().Contains("file changed"))
+            return;
 
+        await api.UpdateGitLastPull(gd.Id, DateTime.Now);
     }
 
 }
@@ -182,6 +208,7 @@ public class API
     {
         var updated = await context.GitDirectories.FindAsync(id);
         updated.LastPull = lastPull;
+        await context.SaveChangesAsync();
     }
 
 }
