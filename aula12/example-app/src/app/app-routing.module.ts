@@ -10,12 +10,19 @@ import { RecoverPageComponent } from './recover-page/recover-page.component';
 import { UserPageComponent } from './user-page/user-page.component';
 
 const routes: Routes = [
-  { path: "", component: HomePageComponent },
-  { path: "login", component: LoginPageComponent },
+  { path: "",  title: "Rede Social Minimalista", component: HomePageComponent },
+  {
+    path: "login",
+    title: "Autenticação",
+    component: LoginPageComponent,
+    children: [
+      { path: "newaccount", component: NewAccountPageComponent }
+    ]
+  },
   { path: "feed", component: FeedPageComponent },
   { path: "comunity", component: ComunityPageComponent },
-  { path: "newaccount", component: NewAccountPageComponent },
-  { path: "recover", component: RecoverPageComponent },
+  { path: "recover/:email", title: "Recuperar Senha", component: RecoverPageComponent },
+  { path: "recover", title: "Recuperar Senha", component: RecoverPageComponent },
   { path: "user", component: UserPageComponent },
   { path: "**", component: NotFoundPageComponent }
 ];

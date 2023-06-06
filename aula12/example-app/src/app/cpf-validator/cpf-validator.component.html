@@ -1,0 +1,16 @@
+<div>
+    <p>
+        <label>CPF</label>
+        <br>
+        <input
+            maxlength={{maxLength}}
+            [(ngModel)]="inputCPF"
+            (change)="checkInput($event)"
+            (keypress)="checkInput($event)"
+            (keydown)="checkInput($event)">
+    </p>
+
+    <p style="color : red;">
+        {{ !isValid ? "CPF Inválido" : ""}}
+    </p>
+</div>

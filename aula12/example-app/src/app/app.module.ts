@@ -12,6 +12,11 @@ import { RecoverPageComponent } from './recover-page/recover-page.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { FeedPageComponent } from './feed-page/feed-page.component';
 import { ComunityPageComponent } from './comunity-page/comunity-page.component';
+import { PasswordComponent } from './password/password.component';
+import { FormsModule } from '@angular/forms';
+import { CreatePasswordComponent } from './create-password/create-password.component';
+import { CpfValidatorComponent } from './cpf-validator/cpf-validator.component';
+import { CardComponent } from './card/card.component';
 
 @NgModule({
   declarations: [
@@ -24,11 +29,16 @@ import { ComunityPageComponent } from './comunity-page/comunity-page.component';
     RecoverPageComponent,
     UserPageComponent,
     FeedPageComponent,
-    ComunityPageComponent
+    ComunityPageComponent,
+    PasswordComponent,
+    CreatePasswordComponent,
+    CpfValidatorComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
