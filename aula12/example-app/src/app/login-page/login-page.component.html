@@ -1,26 +1,30 @@
-<h1>
-    Login
-</h1>
+<div class="login-box">
+    <h1>
+        Login
+    </h1>
 
-<p>
-    <label>Email/Username</label>
-    <br>
-    <input [(ngModel)]="email">
-</p>
+    <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="youremail@example.com" [formControl]="email">
+        <mat-error *ngIf="email.invalid">Email Inválido</mat-error>
+    </mat-form-field>
 
-<app-password [seePassword]="false" [breakLineOnInput]="true" />
 
-<p>
-    <button>Logar</button>
-</p>
+    <app-bunito></app-bunito>
+    <!-- <app-password [seePassword]="false" [breakLineOnInput]="true" (valueChanged)="passwordChanged($event)" /> -->
 
-<p>
-    Não possui conta? <a routerLink="newaccount">Crie uma agora mesmo!</a>
-</p>
 
-<p>
-    Esqueceu sua senha? <a href="{{'/recover/' + email}}">Recupere agora!</a>
-</p>
+    <p>
+        <button mat-flat-button color="primary" (click)="login()">Logar</button>
+    </p>
 
+    <p>
+        Não possui conta? <a routerLink="newaccount">Crie uma agora mesmo!</a>
+    </p>
+
+    <p>
+        Esqueceu sua senha? <a href="{{'/recover/' + email}}">Recupere agora!</a>
+    </p>
+</div>
 
 <router-outlet />

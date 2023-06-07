@@ -2,10 +2,33 @@
     Nova Conta
 </h1>
 
+
+<label>Email</label>
+<br>
+<input type="text" [formControl]="email">
+
+<div *ngIf="email.invalid" style="color: red;">
+    <div *ngIf="email.errors?.['required']">
+        Name is required.
+    </div>
+    <div *ngIf="email.errors?.['minlength']">
+        Name must be at least 4 characters long.
+    </div>
+    <div *ngIf="email.errors?.['email']">
+        Invalid Email
+    </div>
+</div>
+
 <p>
-    <label for="">Email</label>
+    <label>CEP</label>
     <br>
-    <input>
+    <input [(ngModel)]="cepValue" (change)="cepAdded()">
+</p>
+
+<p>
+    <label>Rua</label>
+    <br>
+    <input [(ngModel)]="ruaValue">
 </p>
 
 <app-cpf-validator />

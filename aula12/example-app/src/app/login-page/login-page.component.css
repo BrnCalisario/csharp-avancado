@@ -1,0 +1,26 @@
+.login-box
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 5%;
+    outline: 1px solid lightgray;
+    background-color: #303030;
+    width: 50%;
+    margin: 5% auto;
+    color: white;
+}
+
+.login-box a {
+    text-decoration: none;
+    color: #e91e63;
+}
+
+.login-box a:hover {
+    color: #c51852;
+}
+
+.login-box mat-form-field {
+    width: 350px;
+}
