@@ -26,15 +26,18 @@ public class FakeMessageRepository : IRepository<Mensagem>
         },
     };
 
-    public void Add(Mensagem obj)
-        => fakeData.Add(obj);
+    public async void Add(Mensagem obj)
+    {
+        fakeData.Add(obj);
+        await Task.Delay(10);
+    }
 
     public void Delete(Mensagem obj)
         => fakeData.Remove(obj);
 
-    public Task<List<Mensagem>> Filter(Expression<Func<Mensagem, bool>> exp)
+    public async Task<List<Mensagem>> Filter(Expression<Func<Mensagem, bool>> exp)
     {
-        throw new NotImplementedException();
+        return fakeData.Where(exp.Compile()).ToList();
     }
 
     public void Update(Mensagem obj)

@@ -7,7 +7,7 @@ public partial class Mensagem
 {
     public int Id { get; set; }
 
-    public string Texto { get; set; } = null!;
+    public string Texto { get; set; }
 
     public DateTime Horario { get; set; }
 }

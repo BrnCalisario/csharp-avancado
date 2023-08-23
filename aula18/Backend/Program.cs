@@ -28,11 +28,12 @@ const string url = "https://viacep.com.br/ws/80320330/json/";
 // Injeção de dependencia
 builder.Services.AddScoped<RepoExemploContext>();
 
-if(env.IsDevelopment())
-    builder.Services.AddTransient<IRepository<Mensagem>, MessageRepository>();
-else if(env.IsProduction())
-    builder.Services.AddTransient<IRepository<Mensagem>, MessageRepository>();
+// if(env.IsDevelopment())
+//     builder.Services.AddTransient<IRepository<Mensagem>, FakeMessageRepository>();
+// else if(env.IsProduction())
+//     builder.Services.AddTransient<IRepository<Mensagem>, MessageRepository>();
 
+builder.Services.AddTransient<IRepository<Mensagem>, MessageRepository>();
 
 builder.Services.AddSingleton<ICepService>(p => new CepService(url));
 
@@ -40,7 +41,6 @@ builder.Services.AddTransient<CpfService>();
 
 
 var app = builder.Build();
-
 app.UseCors();
 
 
